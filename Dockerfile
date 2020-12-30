@@ -28,7 +28,8 @@ RUN \
     sqlite3 \
     unzip \
     wget \   
-    build-essential	
+    build-essential	\
+    binutils
 RUN \
  echo "**** install YACReader ****" && \
  if [ -z ${YACR_COMMIT+x} ]; then \
@@ -50,10 +51,12 @@ RUN \
  make  && \
  make install
 RUN \
+ strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
+RUN \
  echo "**** cleanup ****" && \
  cd / && \
  apt-get clean && \
- apt-get purge -y git wget build-essential && \
+ apt-get purge -y git wget build-essential binutils && \
  apt-get -y autoremove && \
  rm -rf \
         /src \
